@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "FreeMessaging",
+    "slug": "free-messaging-mobile-app",
+    "scheme": "freemessaging",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.chakar.freemessaging"
+    },
+    "android": {
+      "package": "com.chakar.freemessaging",
+      "adaptiveIcon": {
+        "backgroundColor": "#0F172A"
+      }
+    },
+    "plugins": [
+      "expo-router"
+    ]
+  }
+}
