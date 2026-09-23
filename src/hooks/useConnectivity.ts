@@ -1,12 +1,3 @@
-import { useEffect, useState } from 'react';
-import { processTextMessageQueue, subscribeToConnectivity } from '@/services/offlineQueue';
-
-export function useConnectivity() {
-  const [online, setOnline] = useState(true);
-  useEffect(() => { const unsubscribe = subscribeToConnectivity(setOnline); return unsubscribe; }, []);
-  return online;
-}
-
-export function useOutboxProcessor(send: Parameters<typeof processTextMessageQueue>[0]) {
-  useEffect(() => { processTextMessageQueue(send).catch(() => undefined); const unsubscribe = subscribeToConnectivity(online => { if (online) processTextMessageQueue(send).catch(() => undefined); }); return unsubscribe; }, [send]);
-}
+import { useCallback, useEffect } from 'react';
+import { processTextMessageQueue, subscribeToConnectivity, type QueuedTextMessage } from '@/services/offlineQueue';
+export function useOutboxProcessor(send: (item: QueuedTextMessage) => Promise<void>, enabled: boolean) { const run = useCallback(() => { if (enabled) processTextMessageQueue(send).catch(() => undefined); }, [enabled, send]); useEffect(() => { if (!enabled) return; run(); return subscribeToConnectivity(online => { if (online) run(); }); }, [enabled, run]); }

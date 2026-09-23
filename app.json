@@ -24,7 +24,7 @@
     "plugins": [
       "expo-router",
       ["expo-image-picker", { "photosPermission": "Choose photos and videos to send in conversations." }],
-      ["expo-notifications", { "icon": "./assets/notification-icon.png", "color": "#38bdf8" }]
+      "expo-notifications"
     ]
   }
 }
