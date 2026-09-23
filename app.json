@@ -6,21 +6,25 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.chakar.freemessaging"
+      "bundleIdentifier": "com.chakar.freemessaging",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Choose photos and videos to send in conversations.",
+        "NSCameraUsageDescription": "Take photos and videos to send in conversations.",
+        "NSUserNotificationsUsageDescription": "Receive notifications for new messages."
+      }
     },
     "android": {
       "package": "com.chakar.freemessaging",
-      "adaptiveIcon": {
-        "backgroundColor": "#0F172A"
-      }
+      "adaptiveIcon": { "backgroundColor": "#0F172A" },
+      "permissions": ["CAMERA", "READ_MEDIA_IMAGES", "READ_MEDIA_VIDEO", "POST_NOTIFICATIONS"]
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      ["expo-image-picker", { "photosPermission": "Choose photos and videos to send in conversations." }],
+      ["expo-notifications", { "icon": "./assets/notification-icon.png", "color": "#38bdf8" }]
     ]
   }
 }
