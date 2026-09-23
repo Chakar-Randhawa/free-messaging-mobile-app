@@ -1,35 +1,7 @@
 import { useEffect, useState } from 'react';
-import { searchUsers, subscribeToConversations, subscribeToMessages } from '@/services/chat';
+import { searchUsers, subscribeToConversations, subscribeToMessages, subscribeToTyping } from '@/services/chat';
 import type { Conversation, Message, UserProfile } from '@/types/chat';
-
-export function useConversations(uid: string | undefined) {
-  const [items, setItems] = useState<Conversation[]>([]);
-  const [loading, setLoading] = useState(Boolean(uid));
-  useEffect(() => {
-    if (!uid) { setItems([]); setLoading(false); return; }
-    setLoading(true);
-    return subscribeToConversations(uid, (next) => { setItems(next); setLoading(false); });
-  }, [uid]);
-  return { items, loading };
-}
-
-export function useMessages(conversationId: string | undefined) {
-  const [items, setItems] = useState<Message[]>([]);
-  useEffect(() => {
-    if (!conversationId) { setItems([]); return; }
-    return subscribeToMessages(conversationId, setItems);
-  }, [conversationId]);
-  return items;
-}
-
-export function useUserSearch(term: string, currentUid?: string) {
-  const [items, setItems] = useState<UserProfile[]>([]);
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const unsubscribe = searchUsers(term, (users) => setItems(users.filter((item) => item.uid !== currentUid)));
-      return unsubscribe;
-    }, 250);
-    return () => clearTimeout(timer);
-  }, [term, currentUid]);
-  return items;
-}
+export function useConversations(uid?: string) { const [items, setItems] = useState<Conversation[]>([]); const [loading, setLoading] = useState(!!uid); useEffect(() => { if (!uid) { setItems([]); setLoading(false); return; } setLoading(true); return subscribeToConversations(uid, v => { setItems(v); setLoading(false); }); }, [uid]); return { items, loading }; }
+export function useMessages(id?: string) { const [items, setItems] = useState<Message[]>([]); const [loading, setLoading] = useState(!!id); useEffect(() => { if (!id) { setItems([]); return; } setLoading(true); return subscribeToMessages(id, v => { setItems(v); setLoading(false); }); }, [id]); return { items, loading }; }
+export function useUserSearch(term: string, currentUid?: string) { const [items, setItems] = useState<UserProfile[]>([]); useEffect(() => { const timer = setTimeout(() => { const unsubscribe = searchUsers(term, users => setItems(users.filter(u => u.uid !== currentUid))); return unsubscribe; }, 250); return () => clearTimeout(timer); }, [term, currentUid]); return items; }
+export function useTypingState(id?: string) { const [ids, setIds] = useState<string[]>([]); useEffect(() => { if (!id) { setIds([]); return; } return subscribeToTyping(id, setIds); }, [id]); return ids; }
